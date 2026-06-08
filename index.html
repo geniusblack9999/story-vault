@@ -454,8 +454,7 @@
                 card.className = "bg-white p-5 rounded-xl border border-slate-200 hover:border-[#1D4591] shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between cursor-pointer group";
                 card.onclick = () => openModal(story);
 
-                const dateObj = new Date(story["Date"]);
-                const formattedDate = story["Date"];
+                const formattedDate = story["Date"] ? story["Date"].substring(0, 10) : "";
 
                 const rawTitle = story["Sermon Title"] || "Untitiled Sermon";
                 const highlightedTitle = highlightText(rawTitle, query);
