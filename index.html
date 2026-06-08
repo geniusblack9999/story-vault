@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Story Vault - Sermon Illustrations Archive</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#15803d',
+                            600: '#166534',
+                            700: '#14532d',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .highlight {
+            background-color: #fef08a; /* Tailwind yellow-200 */
+            color: #1e293b; /* Tailwind slate-800 */
+            padding: 0.1rem 0.2rem;
+            border-radius: 0.125rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-brand-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+            <div class="flex items-center space-x-3">
+                <!-- Retro Hip Hop Icon or Shield -->
+                <div class="bg-emerald-500 p-2.5 rounded-lg shadow-inner text-white font-bold text-xl tracking-wider">
+                    ER
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight">The Story Vault</h1>
+                    <p class="text-xs text-emerald-200 uppercase tracking-widest font-semibold">Sermon Illustrations Archive</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-xs bg-emerald-800 text-emerald-200 px-3 py-1 rounded-full border border-emerald-700 font-medium">
+                    26 Years of Backtracking (2000 - 2026)
+                </span>
+                <a href="https://docs.google.com/spreadsheets/d/1EJ5HgEfgkS7nu86rUs3AZdfKpQ72lW5sZd33sPowfgo/edit" target="_blank" class="text-xs text-white hover:text-emerald-300 font-semibold flex items-center space-x-1 underline">
+                    <span>Source Spreadsheet</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
+        
+        <!-- Sidebar Filter Panel -->
+        <aside class="w-full lg:w-64 flex-shrink-0 space-y-6">
+            <!-- Stats Summary Card -->
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-4">Vault Summary</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="text-3xl font-extrabold text-brand-600" id="stat-total-stories">0</div>
+                        <div class="text-xs text-slate-400 font-medium">Stories</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-extrabold text-slate-800" id="stat-total-themes">0</div>
+                        <div class="text-xs text-slate-400 font-medium">Themes</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Card -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-lg font-bold text-slate-800 flex items-center space-x-2">
+                        <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                        <span>Filters</span>
+                    </h2>
+                    <button onclick="resetFilters()" class="text-xs text-brand-600 hover:text-brand-700 font-semibold underline">
+                        Reset All
+                    </button>
+                </div>
+
+                <!-- Theme Filter -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-slate-700">Theme / Category</label>
+                    <select id="filter-theme" onchange="filterResults()" class="w-full rounded-lg border-slate-200 bg-slate-50 text-sm py-2.5 px-3 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-slate-700">
+                        <option value="">All Themes</option>
+                    </select>
+                </div>
+
+                <!-- Year Filter -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-slate-700">Preaching Year</label>
+                    <select id="filter-year" onchange="filterResults()" class="w-full rounded-lg border-slate-200 bg-slate-50 text-sm py-2.5 px-3 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-slate-700">
+                        <option value="">All Years</option>
+                    </select>
+                </div>
+
+                <!-- Tag Cloud Filter -->
+                <div class="space-y-3">
+                    <label class="block text-sm font-semibold text-slate-700">Popular Tags</label>
+                    <div id="filter-tags-cloud" class="flex flex-wrap gap-1.5 max-h-48 overflow-y-auto pr-1">
+                        <!-- Dynamic Tags -->
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Cards & Search Area -->
+        <section class="flex-grow space-y-6">
+            <!-- Search Bar Control -->
+            <div class="relative bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                <div class="relative flex items-center">
+                    <span class="absolute left-4 text-slate-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </span>
+                    <input type="text" id="search-input" onkeyup="filterResults()" placeholder="Search stories by title, tags, themes, summary keyword..." class="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
+                </div>
+                <div class="mt-2.5 flex items-center justify-between text-xs text-slate-400 px-1">
+                    <span id="results-count">Showing all stories...</span>
+                    <span>Supports fuzzy matching & highlights matched terms!</span>
+                </div>
+            </div>
+
+            <!-- Cards Grid -->
+            <div id="stories-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Cards dynamically loaded -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden bg-white py-16 px-4 text-center rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <div class="inline-flex p-4 rounded-full bg-slate-100 text-slate-400">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">No Stories Found</h3>
+                    <p class="text-sm text-slate-400 max-w-sm mx-auto">We couldn't find any illustrations matching your search term or selected filters. Try resetting the filters or tweaking your keywords.</p>
+                </div>
+                <button onclick="resetFilters()" class="bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold px-5 py-2.5 rounded-lg shadow-sm transition">
+                    Clear Filters & Reset
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-6 text-center text-xs">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>The Story Vault © 2026. Built with absolute integrity and technical due diligence for the Rock Church Creative Team.</p>
+            <p class="text-slate-600">Equipped with local search indexing and direct-to-second YouTube playback mapping.</p>
+        </div>
+    </footer>
+
+    <!-- Global Illustration Detail Modal -->
+    <div id="detail-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex justify-center items-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-3xl w-full overflow-hidden transform scale-95 transition-all">
+            <!-- Modal Header -->
+            <div class="bg-brand-900 text-white p-6 relative">
+                <button onclick="closeModal()" class="absolute top-4 right-4 text-emerald-100 hover:text-white bg-brand-800/40 hover:bg-brand-800/60 p-1.5 rounded-full transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+                <div class="space-y-1 pr-8">
+                    <div class="flex items-center space-x-2 text-xs text-emerald-300 font-semibold uppercase tracking-wider">
+                        <span id="modal-date">May 24, 2026</span>
+                        <span>•</span>
+                        <span id="modal-sermon-title">Jesus Claims To Be God</span>
+                    </div>
+                    <h2 class="text-2xl font-bold tracking-tight" id="modal-illustration-name">The Boppy Code</h2>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 md:p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+                <!-- Summary Section -->
+                <div class="space-y-2">
+                    <h4 class="text-xs uppercase tracking-wider text-slate-400 font-bold">Story Summary</h4>
+                    <p class="text-slate-700 text-sm leading-relaxed" id="modal-summary">
+                        Summary content goes here.
+                    </p>
+                </div>
+
+                <!-- Spiritual Metaphor -->
+                <div class="bg-emerald-50 border border-emerald-100 p-5 rounded-xl space-y-2">
+                    <div class="flex items-center space-x-2 text-brand-700 font-bold text-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <span>Spiritual Metaphor & Preaching Application</span>
+                    </div>
+                    <p class="text-slate-800 text-sm leading-relaxed italic" id="modal-metaphor">
+                        Metaphor content goes here.
+                    </p>
+                </div>
+
+                <!-- Metadata Row -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 border-t border-slate-100 text-sm">
+                    <div class="space-y-3">
+                        <div class="space-y-1">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Theme / Category</span>
+                            <span id="modal-theme" class="inline-block bg-slate-100 text-slate-700 px-3 py-1 rounded-md text-xs font-semibold border border-slate-200">Family</span>
+                        </div>
+                        <div class="space-y-1.5">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Tags</span>
+                            <div id="modal-tags" class="flex flex-wrap gap-1">
+                                <!-- Modal tags dynamic -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Direct Actions (Buttons) -->
+                    <div class="flex flex-col justify-end space-y-2">
+                        <!-- YouTube Playback Button -->
+                        <a id="modal-yt-btn" href="#" target="_blank" class="w-full flex items-center justify-center space-x-2 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-sm transition text-xs">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.545 12 3.545 12 3.545s-7.518 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.87.508 9.388.508 9.388.508s7.518 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                            <span id="modal-yt-btn-text">Open Playback Timestamp Link</span>
+                        </a>
+                        <span id="modal-yt-notice" class="text-[10px] text-slate-400 text-center">
+                            Calculated timestamp play link
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Embedded stories data -->
+    <script>
+        let storiesData = [];
+
+        // YouTube video ID mappings
+        const videoIdMap = {
+            "Jesus Claims To Be God": "0Je8bbtbM84",
+            "Where the Spirit Rests": "sXXhg3BClNA",
+            "Reverse the Curse": "uMVuSBPDpJc",
+            "The Moral Law Giver": "rGMrfzKTJU8",
+            "House of Prayer": "tqrg4vapRwY",
+            "Empty Changes Everything": "rvSW8iGlWDY",
+            "Jesus Is the Perfect Promise": "6-w9S9GowEE",
+            "A Trusting Heart Honors God": "JyzujpR_tVk",
+            "All Is Calm": "yq1v00fUNfo",
+            "God's Heart for YOUR House": "mmo2dZh-SCQ",
+            "The Reasons We Run From God": "NALGaCoAiic",
+            "Lord of the Things - Part 1, Getting in the Fast Lane": "YChOVoZB1c0",
+            "Enough is Enough": "nQMsy0zTyoo",
+            "My Story - Part 1, The Power of Your Story": "zKJfv52aiLg",
+            "Walking on Water": "WkWfuLCKg7Y",
+            "My Story - I Was": "2N31mePN5Ig",
+            "I Was": "2N31mePN5Ig",
+            "Why Bad Things Happen to Good People by Miles McPherson": "mtt2zD_1ZwM",
+            "Why Bad Things Happen To Good People - Part 1": "mtt2zD_1ZwM",
+            "Worthy - Part 1, What Is God Worthy Of?": "s0PBE0aVxZw",
+            "What if? - Rock Church 10-Year Anniversary": "xUhemaoU8Xk",
+            "Rock Church - 20 Year Anniversary": "YOz9yKTVY4k"
+        };
+
+        // Current active state
+        let activeTagFilter = "";
+
+        // Helper to parse Timestamp Link into seconds
+        function getTimestampSeconds(ts) {
+            if (!ts) return 0;
+            // Examples: "10:40", "01:11:17", "00:01:34", "1:11:17"
+            const parts = ts.split(':').map(Number);
+            if (parts.some(isNaN)) return 0;
+            if (parts.length === 2) {
+                return parts[0] * 60 + parts[1];
+            } else if (parts.length === 3) {
+                return parts[0] * 3600 + parts[1] * 60 + parts[2];
+            }
+            return 0;
+        }
+
+        // Generate YouTube link or fallback query link
+        function getYouTubeLink(sermonTitle, ts) {
+            let baseTitle = sermonTitle.trim();
+            // Try to find a match in the keys
+            let videoId = "";
+            for (let key in videoIdMap) {
+                if (baseTitle.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(baseTitle.toLowerCase())) {
+                    videoId = videoIdMap[key];
+                    break;
+                }
+            }
+
+            const secs = getTimestampSeconds(ts);
+
+            if (videoId) {
+                return {
+                    url: `https://www.youtube.com/watch?v=${videoId}&t=${secs}s`,
+                    direct: true
+                };
+            } else {
+                return {
+                    url: `https://www.youtube.com/results?search_query=Rock+Church+Miles+McPherson+${encodeURIComponent(sermonTitle)}`,
+                    direct: false
+                };
+            }
+        }
+
+        // Initialize lists & select filters on page load
+        function initApp() {
+            const themeSelect = document.getElementById("filter-theme");
+            const yearSelect = document.getElementById("filter-year");
+            const tagsCloud = document.getElementById("filter-tags-cloud");
+
+            const themes = new Set();
+            const years = new Set();
+            const tagsCount = {};
+
+            storiesData.forEach(story => {
+                // Extract Themes
+                if (story["Theme/Category"]) {
+                    story["Theme/Category"].split(',').forEach(th => themes.add(th.trim()));
+                }
+                // Extract Years
+                if (story["Date"]) {
+                    const year = story["Date"].substring(0, 4);
+                    if (year && year.length === 4) {
+                        years.add(year);
+                    }
+                }
+                // Extract Tags
+                if (story["Tags"]) {
+                    story["Tags"].split(',').forEach(tg => {
+                        const tag = tg.trim();
+                        if (tag) {
+                            tagsCount[tag] = (tagsCount[tag] || 0) + 1;
+                        }
+                    });
+                }
+            });
+
+            // Populate Themes Select
+            Array.from(themes).sort().forEach(th => {
+                const opt = document.createElement("option");
+                opt.value = th;
+                opt.textContent = th;
+                themeSelect.appendChild(opt);
+            });
+
+            // Populate Years Select
+            Array.from(years).sort().reverse().forEach(yr => {
+                const opt = document.createElement("option");
+                opt.value = yr;
+                opt.textContent = yr;
+                yearSelect.appendChild(opt);
+            });
+
+            // Populate Tags Cloud (Top 30 popular tags)
+            const sortedTags = Object.entries(tagsCount).sort((a, b) => b[1] - a[1]).slice(0, 40);
+            sortedTags.forEach(([tag, count]) => {
+                const pill = document.createElement("button");
+                pill.className = "text-[10px] bg-slate-100 hover:bg-slate-200 border border-slate-200 hover:border-slate-300 text-slate-600 font-semibold px-2 py-0.5 rounded-full transition flex items-center space-x-1";
+                pill.id = `tag-pill-${tag}`;
+                pill.onclick = () => selectTagFilter(tag);
+                pill.innerHTML = `<span>${tag}</span><span class="text-[9px] text-slate-400 font-bold">${count}</span>`;
+                tagsCloud.appendChild(pill);
+            });
+
+            // Set Stats
+            document.getElementById("stat-total-stories").textContent = storiesData.length;
+            document.getElementById("stat-total-themes").textContent = themes.size;
+
+            filterResults();
+        }
+
+        // Tag filter selection toggle
+        function selectTagFilter(tag) {
+            // Remove selection class from old tag pill
+            if (activeTagFilter) {
+                const oldPill = document.getElementById(`tag-pill-${activeTagFilter}`);
+                if (oldPill) {
+                    oldPill.className = "text-[10px] bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-600 font-semibold px-2 py-0.5 rounded-full transition flex items-center space-x-1";
+                }
+            }
+
+            if (activeTagFilter === tag) {
+                activeTagFilter = ""; // Toggle off
+            } else {
+                activeTagFilter = tag; // Toggle on
+                const newPill = document.getElementById(`tag-pill-${tag}`);
+                if (newPill) {
+                    newPill.className = "text-[10px] bg-emerald-600 hover:bg-emerald-700 border border-emerald-600 text-white font-semibold px-2 py-0.5 rounded-full transition flex items-center space-x-1";
+                }
+            }
+
+            filterResults();
+        }
+
+        // Reset all filters
+        function resetFilters() {
+            document.getElementById("search-input").value = "";
+            document.getElementById("filter-theme").value = "";
+            document.getElementById("filter-year").value = "";
+            if (activeTagFilter) {
+                selectTagFilter(activeTagFilter); // Deselect
+            }
+            filterResults();
+        }
+
+        // Highlights text containing keyword
+        function highlightText(text, keyword) {
+            if (!keyword || !keyword.trim()) return text;
+            const cleanKW = keyword.trim().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            const regex = new RegExp(`(${cleanKW})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        // Filter and Search execution
+        function filterResults() {
+            const query = document.getElementById("search-input").value.toLowerCase();
+            const themeFilter = document.getElementById("filter-theme").value;
+            const yearFilter = document.getElementById("filter-year").value;
+
+            const grid = document.getElementById("stories-grid");
+            const emptyState = document.getElementById("empty-state");
+
+            // Empty the grid
+            grid.innerHTML = "";
+
+            let countMatched = 0;
+
+            storiesData.forEach(story => {
+                // Filters
+                const sYear = story["Date"] ? story["Date"].substring(0, 4) : "";
+                const sTheme = story["Theme/Category"] || "";
+                const sTags = story["Tags"] || "";
+
+                if (themeFilter && !sTheme.includes(themeFilter)) return;
+                if (yearFilter && sYear !== yearFilter) return;
+                if (activeTagFilter && !sTags.includes(activeTagFilter)) return;
+
+                // Search Query
+                const sTitle = (story["Sermon Title"] || "").toLowerCase();
+                const sIllName = (story["Illustration Name"] || "").toLowerCase();
+                const sSummary = (story["Story Summary"] || "").toLowerCase();
+                const sMetaphor = (story["Spiritual Metaphor"] || "").toLowerCase();
+                
+                const sCombinedText = `${sTitle} ${sIllName} ${sSummary} ${sMetaphor} ${sTags.toLowerCase()}`;
+
+                if (query && !sCombinedText.includes(query)) return;
+
+                countMatched++;
+
+                // Build HTML Card
+                const card = document.createElement("div");
+                card.className = "bg-white p-5 rounded-xl border border-slate-200 hover:border-emerald-300 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between cursor-pointer group";
+                card.onclick = () => openModal(story);
+
+                const dateObj = new Date(story["Date"]);
+                const formattedDate = story["Date"];
+
+                const rawTitle = story["Sermon Title"] || "Untitiled Sermon";
+                const highlightedTitle = highlightText(rawTitle, query);
+                const rawIllName = story["Illustration Name"] || "Illustration";
+                const highlightedIllName = highlightText(rawIllName, query);
+                const rawSummary = story["Story Summary"] || "";
+                const shortSummary = rawSummary.length > 140 ? rawSummary.substring(0, 140) + "..." : rawSummary;
+                const highlightedSummary = highlightText(shortSummary, query);
+
+                // Theme badges
+                const themeBadges = sTheme.split(',').map(th => {
+                    return `<span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[10px] font-semibold border border-slate-100">${th.trim()}</span>`;
+                }).join(' ');
+
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-start">
+                            <span class="text-[10px] bg-emerald-50 text-brand-700 font-bold px-2 py-0.5 rounded-full border border-emerald-100">
+                                ${formattedDate}
+                            </span>
+                            <span class="text-[10px] text-slate-400 font-semibold uppercase">
+                                ${story["Timestamp Link"] || "00:00"}
+                            </span>
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-base font-bold text-slate-800 group-hover:text-brand-600 transition">${highlightedIllName}</h3>
+                            <p class="text-xs text-slate-400 font-medium">Sermon: ${highlightedTitle}</p>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">${highlightedSummary}</p>
+                    </div>
+                    <div class="pt-4 mt-3 border-t border-slate-100 flex flex-wrap justify-between items-center gap-2">
+                        <div class="flex flex-wrap gap-1">
+                            ${themeBadges}
+                        </div>
+                        <span class="text-xs text-brand-600 font-semibold group-hover:underline flex items-center space-x-1">
+                            <span>Open Details</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </span>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            // Handle empty states
+            if (countMatched === 0) {
+                grid.classList.add("hidden");
+                emptyState.classList.remove("hidden");
+            } else {
+                grid.classList.remove("hidden");
+                emptyState.classList.add("hidden");
+            }
+
+            document.getElementById("results-count").textContent = `Showing ${countMatched} of ${storiesData.length} records`;
+        }
+
+        // Modal triggers
+        function openModal(story) {
+            const modal = document.getElementById("detail-modal");
+            modal.classList.remove("hidden");
+            document.body.classList.add("overflow-hidden");
+
+            document.getElementById("modal-date").textContent = story["Date"];
+            document.getElementById("modal-sermon-title").textContent = story["Sermon Title"];
+            document.getElementById("modal-illustration-name").textContent = story["Illustration Name"];
+            document.getElementById("modal-summary").textContent = story["Story Summary"];
+            document.getElementById("modal-metaphor").textContent = story["Spiritual Metaphor"];
+            document.getElementById("modal-theme").textContent = story["Theme/Category"];
+
+            // Load Tags
+            const tagsBox = document.getElementById("modal-tags");
+            tagsBox.innerHTML = "";
+            if (story["Tags"]) {
+                story["Tags"].split(',').forEach(tg => {
+                    const tag = tg.trim();
+                    if (tag) {
+                        const tBadge = document.createElement("span");
+                        tBadge.className = "bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[10px] font-semibold border border-slate-100";
+                        tBadge.textContent = tag;
+                        tagsBox.appendChild(tBadge);
+                    }
+                });
+            }
+
+            // Playback link logic
+            const ytBtn = document.getElementById("modal-yt-btn");
+            const ytBtnText = document.getElementById("modal-yt-btn-text");
+            const ytNotice = document.getElementById("modal-yt-notice");
+
+            const ytResult = getYouTubeLink(story["Sermon Title"], story["Timestamp Link"]);
+            ytBtn.href = ytResult.url;
+
+            if (ytResult.direct) {
+                ytBtn.className = "w-full flex items-center justify-center space-x-2 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-sm transition text-xs";
+                ytBtnText.textContent = `Direct Playback Link @ ${story["Timestamp Link"]}`;
+                ytNotice.textContent = "Verified direct link (opens exactly at the story's start time)";
+            } else {
+                ytBtn.className = "w-full flex items-center justify-center space-x-2 bg-slate-700 hover:bg-slate-800 text-white font-bold py-2.5 px-4 rounded-xl shadow-sm transition text-xs";
+                ytBtnText.textContent = `Search YouTube for this Sermon`;
+                ytNotice.textContent = "Fallback search query (opens YouTube search for this specific sermon date & title)";
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("detail-modal");
+            modal.classList.add("hidden");
+            document.body.classList.remove("overflow-hidden");
+        }
+
+        // Close on escape or outside tap
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+        document.getElementById("detail-modal").addEventListener('click', (e) => {
+            if (e.target.id === 'detail-modal') closeModal();
+        });
+
+        // Initialize on load
+        window.onload = () => {
+            fetch('sermon_stories.json')
+                .then(r => r.json())
+                .then(data => {
+                    storiesData = data.filter(s => s["Date"] !== ":-:");
+                    initApp();
+                })
+                .catch(() => {
+                    document.getElementById("stories-grid").innerHTML = '<p class="text-red-500 text-center col-span-2 py-12">Could not load story data. Make sure sermon_stories.json is in the same folder.</p>';
+                });
+        };
+    </script>
+</body>
+</html>
