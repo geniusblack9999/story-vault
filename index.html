@@ -586,7 +586,10 @@
             const ytBtnText = document.getElementById("modal-yt-btn-text");
             const ytNotice = document.getElementById("modal-yt-notice");
 
-            const ytResult = getYouTubeLink(story["Sermon Title"], story["Timestamp Link"]);
+            // Prefer the YouTube URL exported directly from Column E HYPERLINK formula
+            const ytResult = story["YouTube URL"]
+                ? { url: story["YouTube URL"], direct: true }
+                : getYouTubeLink(story["Sermon Title"], story["Timestamp Link"]);
             ytBtn.href = ytResult.url;
 
             if (ytResult.direct) {
