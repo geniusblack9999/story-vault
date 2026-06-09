@@ -188,6 +188,22 @@
                     </p>
                 </div>
 
+                <!-- Full Story Section -->
+                <div id="modal-full-story-section" class="hidden space-y-3">
+                    <div class="border-t border-slate-100 pt-4 space-y-2">
+                        <h4 class="text-[10px] uppercase tracking-[0.25em] text-slate-400 font-black">Full Story</h4>
+                        <div id="modal-full-story-text" class="text-slate-700 text-sm leading-relaxed space-y-3"></div>
+                    </div>
+                </div>
+
+                <!-- Read Full Story Button -->
+                <div id="modal-full-story-btn-wrap">
+                    <button id="modal-full-story-btn" onclick="toggleFullStory()" class="w-full flex items-center justify-center space-x-2 bg-black hover:bg-slate-800 text-white font-black py-2.5 px-4 rounded-xl shadow-sm transition text-xs uppercase tracking-widest">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <span id="modal-full-story-btn-text">Read Full Story</span>
+                    </button>
+                </div>
+
                 <!-- Spiritual Metaphor -->
                 <div class="bg-[#F5F0EB] border border-[#D3CBC0] p-5 rounded-xl space-y-2">
                     <div class="flex items-center space-x-2 text-[#1D4591] font-bold text-sm">
@@ -512,17 +528,43 @@
         }
 
         // Modal triggers
+        function toggleFullStory() {
+            const section = document.getElementById("modal-full-story-section");
+            const btnText = document.getElementById("modal-full-story-btn-text");
+            const isHidden = section.classList.contains("hidden");
+            section.classList.toggle("hidden");
+            btnText.textContent = isHidden ? "Hide Full Story" : "Read Full Story";
+        }
+
         function openModal(story) {
             const modal = document.getElementById("detail-modal");
             modal.classList.remove("hidden");
             document.body.classList.add("overflow-hidden");
 
-            document.getElementById("modal-date").textContent = story["Date"];
+            document.getElementById("modal-date").textContent = story["Date"] ? story["Date"].substring(0, 10) : "";
             document.getElementById("modal-sermon-title").textContent = story["Sermon Title"];
             document.getElementById("modal-illustration-name").textContent = story["Illustration Name"];
             document.getElementById("modal-summary").textContent = story["Story Summary"];
             document.getElementById("modal-metaphor").textContent = story["Spiritual Metaphor"];
             document.getElementById("modal-theme").textContent = story["Theme/Category"];
+
+            // Reset full story section
+            const fullStorySection = document.getElementById("modal-full-story-section");
+            const fullStoryText = document.getElementById("modal-full-story-text");
+            const fullStoryBtnWrap = document.getElementById("modal-full-story-btn-wrap");
+            const fullStoryBtnTextEl = document.getElementById("modal-full-story-btn-text");
+            fullStorySection.classList.add("hidden");
+            fullStoryBtnTextEl.textContent = "Read Full Story";
+
+            const fullStory = story["Full Story Text"] || "";
+            if (fullStory.trim()) {
+                fullStoryBtnWrap.classList.remove("hidden");
+                fullStoryText.innerHTML = fullStory.split('\n\n').map(p =>
+                    `<p>${p.replace(/\n/g, '<br>')}</p>`
+                ).join('');
+            } else {
+                fullStoryBtnWrap.classList.add("hidden");
+            }
 
             // Load Tags
             const tagsBox = document.getElementById("modal-tags");
@@ -548,7 +590,7 @@
             ytBtn.href = ytResult.url;
 
             if (ytResult.direct) {
-                ytBtn.className = "w-full flex items-center justify-center space-x-2 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-sm transition text-xs";
+                ytBtn.className = "w-full flex items-center justify-center space-x-2 bg-[#DF4661] hover:bg-[#c73a55] text-white font-bold py-2.5 px-4 rounded-xl shadow-sm transition text-xs";
                 ytBtnText.textContent = `Direct Playback Link @ ${story["Timestamp Link"]}`;
                 ytNotice.textContent = "Verified direct link (opens exactly at the story's start time)";
             } else {
